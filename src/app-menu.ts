@@ -1,14 +1,25 @@
-import { LitElement, html, css, customElement, property } from 'lit-element';
+import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement("app-menu")
 export class AppMenu extends LitElement {
 
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 16px;
+      }
+    `;
+  }
+
   render() {
     return html`
       <app-navigator href="/">Home</app-navigator>
-      <app-navigator href="/info">Info</app-navigator>
-      <app-navigator href="/info?data=12345">Info?data=12345</app-navigator>
-      <app-navigator href="/user/14">user/14</app-navigator>
+      <app-navigator href="/user">user</app-navigator>
+      <app-navigator href="/xxxx">missing link(redirect home)</app-navigator>
     `;
   }
 }

@@ -1,69 +1,48 @@
-import { LitElement, html, css, customElement, property } from 'lit-element';
-import { router } from 'lit-element-router';
+import { LitElement, html, css } from 'lit';
+import {  customElement, property } from 'lit/decorators.js';
+import type { RouteConfig } from './app-content';
 
 @customElement('app-root')
-export class AppRoot extends router(LitElement) {
+export class AppRoot extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: grid;
+        height: 100vh;
+        grid-template-rows: 64px 1fr;
+        grid-template-columns: 180px 1fr;
+      }
+
+      app-header {
+        grid-row: 1;
+        grid-column: 1 / 2 span;
+        --header-color: #333;
+        --header-text-color: #efefef;
+      }
+
+      app-menu {
+        grid-row: 2;
+        grid-column: 1;
+      }
+
+      app-content {
+        grid-row: 2;
+        grid-column: 2;
+      }
     `;
   }
 
-  @property() route: string = ''
-  @property() params: Object = {}
-  @property() query: Object = {}
-  @property() data: Object = {}
-
-  static get routes() {
-    return [
-      {
-        name: "home",
-        pattern: "",
-        data: { title: "Home" }
-      },
-      {
-        name: "info",
-        pattern: "info"
-      },
-      {
-        name: "user",
-        pattern: "user/:id"
-      },
-      {
-        name: "default",
-        pattern: "*"
-      }
-    ];
-  }
-
-  constructor() {
-    super();
-    this.route = '';
-    this.query = {};
-    this.params = {};
-    this.data = {};
-  }
-
-  router(route: string | undefined, params: Object, query: Object, data: Object) {
-    this.route = route || '';
-    this.params = params;
-    this.query = query;
-    this.data = data;
-    console.log(route, params, query, data);
-  }
+  private v: Array<RouteConfig> = [
+    {component: 'user-content', pattern: '/user'},
+    {component: 'home-content', pattern: '/', default: true}
+  ]
 
   render() {
     return html`
-      <app-header></app-header>
-      <div>
-        <app-menu></app-menu>
-        <app-content active-route="${this.route}">
-          <div route="home">aa</div>
-          <div route="info">bb</div>
-          <div route="user">cc</div>
-          <div route="default">default</div>
-        </app-content>
-      </div>
+      <app-header title="lit-app"></app-header>
+      <app-menu></app-menu>
+      <app-content .routes=${this.v}></app-content>
     `;
   }
 }

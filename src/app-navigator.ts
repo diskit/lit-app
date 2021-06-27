@@ -1,8 +1,8 @@
-import { customElement, html, LitElement, property } from "lit-element";
-import { navigator } from "lit-element-router";
+import {  html, LitElement } from "lit";
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement("app-navigator")
-export class AppNavigator extends navigator(LitElement) {
+export class AppNavigator extends LitElement {
 
   @property() href: string = '';
 
@@ -16,6 +16,11 @@ export class AppNavigator extends navigator(LitElement) {
 
   linkClick(event: MouseEvent) {
     event.preventDefault();
-    this.navigate(this.href);
+    this.navigate()
+  }
+
+  private navigate() {
+    history.pushState(null, '', this.href)
+    window.dispatchEvent(new CustomEvent('navigate', { detail: { next : this.href}}))
   }
 }
