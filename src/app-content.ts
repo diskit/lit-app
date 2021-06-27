@@ -9,6 +9,10 @@ export class AppContent extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.initHashMode();
+  }
+
+  private initHistoryMode() {
     window.addEventListener('navigate', (e: Event) => {
       const event = e as CustomEvent;
       this.onNavigate(event.detail)
@@ -16,8 +20,13 @@ export class AppContent extends LitElement {
 
     window.addEventListener('popstate', () => {
       this.switchContent(location.pathname);
-    })
-    setTimeout(() => this.switchContent(''), 0) 
+    });
+    setTimeout(()=> this.switchContent(location.pathname), 0);
+  }
+
+  private initHashMode() {
+    window.addEventListener('hashchange', () => this.switchContent(location.hash.substr(1)));
+    setTimeout(() => this.switchContent(location.hash.substr(1)), 0);
   }
 
   private onNavigate(data: {next: string}) {

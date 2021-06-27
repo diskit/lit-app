@@ -20,7 +20,16 @@ export class AppNavigator extends LitElement {
   }
 
   private navigate() {
+    // this.history();
+    this.hash();
+  }
+
+  private history() {
     history.pushState(null, '', this.href)
     window.dispatchEvent(new CustomEvent('navigate', { detail: { next : this.href}}))
+  }
+
+  private hash() {
+    location.hash = this.href;
   }
 }
