@@ -18,7 +18,7 @@ export class AppMenu extends LitElement {
   render() {
     return html`
       <app-navigator href="/">Home</app-navigator>
-      <app-navigator href="/user">user</app-navigator>
+      <app-navigator href="/user/1111">user</app-navigator>
       <app-navigator href="/xxxx">missing link(redirect home)</app-navigator>
     `;
   }

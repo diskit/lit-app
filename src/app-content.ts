@@ -1,11 +1,12 @@
 import { LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { MatchingResult, Router, Routes } from './router/router';
 
 @customElement("app-content")
 export class AppContent extends LitElement {
 
-  @property({type: Array})
-  routes: RouteConfig[] = []
+  @property({attribute: false})
+  routes: Router = new Router([])
 
   connectedCallback() {
     super.connectedCallback();
@@ -35,17 +36,13 @@ export class AppContent extends LitElement {
 
   private switchContent(c: string) {
     Array.from(this.shadowRoot?.children || []).forEach((v: Node) => v.parentNode?.removeChild(v) )
-    this.shadowRoot?.appendChild(document.createElement(this.next(c)));
+    const {component, parameter} = this.next(c);
+    const element = document.createElement(component);
+    Object.entries(parameter).forEach((entry) => element.setAttribute(entry[0], entry[1]))
+    this.shadowRoot?.appendChild(element);
   }
 
-  private next(target: string): string {
-    const defaultComponent = this.routes.find(v => v.default);
-    return (this.routes.find((v) => v.pattern === target) || defaultComponent)?.component || '';
+  private next(target: string): MatchingResult {
+    return this.routes.next(target);
   }
-}
-
-export interface RouteConfig {
-  component: string,
-  pattern: string,
-  default?: boolean
 }

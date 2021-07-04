@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import {  customElement, property } from 'lit/decorators.js';
-import type { RouteConfig } from './app-content';
+import { Router, Routes } from './router/router';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -33,10 +33,10 @@ export class AppRoot extends LitElement {
     `;
   }
 
-  private v: Array<RouteConfig> = [
-    {component: 'user-content', pattern: '/user'},
-    {component: 'home-content', pattern: '/', default: true}
-  ]
+  private v = new Router([
+    {component: 'user-content', pattern: '/user/:id', asDefault: false},
+    {component: 'home-content', pattern: '/', asDefault: true}
+  ]);
 
   render() {
     return html`
